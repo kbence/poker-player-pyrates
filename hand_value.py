@@ -2,6 +2,7 @@ from itertools import combinations
 
 from player import PlayerCard
 
+
 # scale within the same type eg. one pair
 SAME_TYPE_SCALE = 10
 
@@ -12,6 +13,16 @@ class HandType():
     ROW='row'
     FULL_HOUSE='full_house'
     FLUSH='flush'
+
+
+DEFAULT_SCALE_CONFIG = {
+    HandType.PAIR: {'min': 0, 'max': 10},
+    HandType.TWO_PAIRS : {'min': 20, 'max': 40},
+    HandType.DRILL: {'min': 100, 'max': 150},
+    HandType.ROW: {'min': 300, 'max': 400},
+    HandType.FLUSH: {'min': 500, 'max': 600},
+    HandType.FULL_HOUSE: {'min': 900, 'max': 1000}
+}
 
 
 def get_deck_value(game_state):
@@ -28,15 +39,7 @@ def get_cards(game_state):
     return all_cards
 
 
-def get_cards_value(cards):
-    scale_config = {
-        HandType.PAIR: {'min': 0, 'max': 10},
-        HandType.TWO_PAIRS : {'min': 20, 'max': 40},
-        HandType.DRILL: {'min': 100, 'max': 150},
-        HandType.ROW: {'min': 300, 'max': 400},
-        HandType.FLUSH: {'min': 500, 'max': 600},
-        HandType.FULL_HOUSE: {'min': 900, 'max': 1000}
-    }
+def get_cards_value(cards, scale_config=DEFAULT_SCALE_CONFIG):
 
     # Values by hand type
     all_values = []
@@ -48,6 +51,9 @@ def get_cards_value(cards):
     all_values.append(val)
 
     val = scale_hand_value(scale_config, HandType.DRILL, get_drill_value(cards))
+    all_values.append(val)
+
+    val = scale_hand_value(scale_config, HandType.FULL_HOUSE, get_full_value(cards))
     all_values.append(val)
 
     return int(max(all_values))
