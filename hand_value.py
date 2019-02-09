@@ -28,3 +28,40 @@ def get_pair_value(cards):
             highest_value = c[0].chen_value
 
     return highest_value
+
+
+def get_two_pair_value(cards):
+    chen_cards = set([PlayerCard(card) for card in cards])
+
+    highest_value_r1 = 0
+    matches_r1 = set()
+
+    combos = combinations(chen_cards, 2)
+    for c in combos:
+        if c[0].rank == c[1].rank and c[0].chen_value > highest_value_r1:
+            highest_value_r1 = c[0].chen_value
+            matches_r1.add(c[0])
+            matches_r1.add(c[1])
+            break
+
+    highest_value_r2 = 0
+    chen_cards = chen_cards.difference(matches_r1)
+    combos = combinations(chen_cards, 2)
+    for c in combos:
+        if c[0].rank == c[1].rank and c[0].chen_value > highest_value_r2:
+            highest_value_r2 = c[0].chen_value
+
+    return max(highest_value_r1, highest_value_r2) if highest_value_r2 else 0
+
+
+def get_drill_value(cards):
+    chen_cards = [PlayerCard(card) for card in cards]
+
+    highest_value = 0
+    combos = combinations(chen_cards, 3)
+
+    for c in combos:
+        if c[0].rank == c[1].rank and c[1].rank == c[2].rank and c[0].chen_value > highest_value:
+            highest_value = c[0].chen_value
+
+    return highest_value
