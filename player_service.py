@@ -34,7 +34,6 @@ class PlayerService(BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             game_state = {}
 
-
         response = ''
         if action == 'bet_request':
             response = Player().betRequest(game_state)
@@ -44,6 +43,7 @@ class PlayerService(BaseHTTPServer.BaseHTTPRequestHandler):
             response = Player.VERSION
 
         self.wfile.write(response)
+
 
 if __name__ == '__main__':
     server_class = BaseHTTPServer.HTTPServer
