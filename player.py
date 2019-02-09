@@ -14,7 +14,7 @@ class PlayerCard:
         self.rank = card['rank']
         self.suit = card['suit']
         self.index = RANKS.index(card['rank'])
-        self.chen_value = int( CARD_VAL_MAP[self.rank] if self.rank in CARD_VAL_MAP else int(self.rank) / 2)
+        self.chen_value = int(math.ceil(CARD_VAL_MAP[self.rank] if self.rank in CARD_VAL_MAP else int(self.rank) / 2))
 
     def __str__(self):
         return '[{} {} {}]'.format(self.rank, self.suit, self.chen_value)
@@ -31,6 +31,7 @@ class Player:
 
         current_buy_in = game_state['current_buy_in']
         player = game_state['players'][game_state['in_action']]
+        dealer = game_state['dealer']
         minimum_raise = game_state['minimum_raise']
 
         c1 = PlayerCard(player['hole_cards'][0])
@@ -61,7 +62,16 @@ class Player:
         # Starting hand calculation
         if len(game_state['community_cards']) == 0:
             self.log.info('CHEN')
-            if chen_sum >= 9:
+            position = self.get_position(dealer, player['id'])
+            when_to_raise = 0
+            if 0 <= position <= 1:
+                when_to_raise = 9
+            elif 2 <= position < 4:
+                when_to_raise = 8
+            else:
+                when_to_raise = 7
+
+            if chen_sum >= when_to_raise:
                 return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
             else:
                 return 0
@@ -76,6 +86,12 @@ class Player:
     def showdown(self, game_state):
         pass
 
+    @staticmethod
+    def get_position(dealer, player):
+        if player <= dealer:
+            return 6 - dealer + player
+        else:
+            return player - dealer
 
 
     @staticmethod
