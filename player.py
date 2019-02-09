@@ -83,8 +83,9 @@ class Player:
         self.log.info('Deck value is estimated to: %d' % value)
 
         if value > 0:
-            raise_value = int(minimum_raise * (1 + value / 20))
-            self.log.info('Raising by {}', raise_value)
+            max_raise = int(minimum_raise * (1 + value / 20))
+            raise_value = min(minimum_raise, max_raise // 2)
+            self.log.info('Raising by {}, max raise is', raise_value, max_raise)
             return current_buy_in - player['bet'] + raise_value
         else:
             self.log.info('We have nothing, let\'s fold')
