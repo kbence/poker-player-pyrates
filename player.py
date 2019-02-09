@@ -81,7 +81,10 @@ class Player:
         # Not a starting hand
         if self.is_pair(c1, c2):
             self.log.info('Minimum raise due to pair: {} {}', c1, c2)
-            return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
+            if chen_sum >= 10:
+                return int(player['stack'], current_buy_in - player['bet'] + minimum_raise)
+            else:
+                return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
 
         return 0
 
