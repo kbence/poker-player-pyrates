@@ -121,6 +121,34 @@ class MyTestCase(unittest.TestCase):
         value = hand_value.get_poker_value(deck)
         self.assertEqual(value, 6)
 
+    def test_get_pair_value_with_own_hand_nothing(self):
+        own = to_deck([('K', 's'), ('J', 's')])
+        table = to_deck([('A', 'c'), ('2', 'h'), ('5', 'd')])
+
+        value = hand_value.get_pair_value_with_own_hand(own, table)
+        self.assertEqual(value, 0)
+
+    def test_get_pair_value_with_own_hand_twos(self):
+        own = to_deck([('K', 's'), ('2', 's')])
+        table = to_deck([('A', 'c'), ('2', 'h'), ('5', 'd')])
+
+        value = hand_value.get_pair_value_with_own_hand(own, table)
+        self.assertEqual(value, 1)
+
+    def test_get_pair_value_with_own_hand_aces(self):
+        own = to_deck([('A', 's'), ('2', 's')])
+        table = to_deck([('A', 'c'), ('2', 'h'), ('5', 'd')])
+
+        value = hand_value.get_pair_value_with_own_hand(own, table)
+        self.assertEqual(value, 10)
+
+    def test_get_pair_value_with_own_hand_j(self):
+        own = to_deck([('A', 's'), ('J', 's')])
+        table = to_deck([('J', 'c'), ('2', 'h'), ('5', 'd')])
+
+        value = hand_value.get_pair_value_with_own_hand(own, table)
+        self.assertEqual(value, 6)
+
 
 def to_card(rank, s):
     suite = SUITES[s]
