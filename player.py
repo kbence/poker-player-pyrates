@@ -21,10 +21,6 @@ class GameStateLogger(object):
 class Player:
     VERSION = "Special algorithm update2"
 
-    def __init__(self):
-        self.log = logging.getLogger(__name__)
-        self.log.setLevel(logging.DEBUG)
-
     def betRequest(self, game_state):
         self.log = GameStateLogger(game_state)
 
@@ -71,7 +67,6 @@ class Player:
             else:
                 self.log.info('We dont care about positions')
 
-
             if chen_sum >= when_to_raise:
                 self.log.info('CHEN value of hand is %s, raising' % chen_sum)
                 return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
@@ -79,14 +74,27 @@ class Player:
                 self.log.info('CHEN value of hand is %s, folding' % chen_sum)
                 return 0
 
+        return self.get_post_flop_decision(game_state)
+
+    def get_post_flop_decision(self, game_state):
+        minimum_raise = game_state['minimum_raise']
+
         value = get_deck_value(game_state)
-        self.log.info('Deck value is estimated to: %d' % value)
+
+        self.log.info('Deck value is estimated to: {}', value)
 
         if value > 0:
             max_raise = int(minimum_raise * (1 + value / 20))
-            raise_value = min(minimum_raise, max_raise // 2)
-            self.log.info('Raising by {}, max raise is', raise_value, max_raise)
-            return current_buy_in - player['bet'] + raise_value
+            raise_value = max(minimum_raise, max_raise // 2)
+            player = game_state['players'][game_state['in_action']]
+            print(max_raise, raise_value)
+
+            if raise_value < player['stack'] * 0.3:
+                self.log.info('Raising by {}, max raise is {}', raise_value, max_raise)
+
+                return game_state['current_buy_in'] - player['bet'] + raise_value
+            else:
+                self.log.info('Not putting more then 30% of our {} stack', player['stack'])
         else:
             self.log.info('We have nothing, let\'s fold')
 
