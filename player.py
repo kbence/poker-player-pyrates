@@ -62,14 +62,14 @@ class Player:
         if len(game_state['community_cards']) == 0:
             self.log.info('CHEN')
             if chen_sum >= 9:
-                return min(player['stack'] * 0.3, current_buy_in - player['bet'] + minimum_raise)
+                return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
             else:
                 return 0
 
         # Not a starting hand
         if self.is_pair(c1, c2):
             self.log.info('Minimum raise due to pair: {} {}', c1, c2)
-            return min(player['stack'] * 0.3, current_buy_in - player['bet'] + minimum_raise)
+            return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
 
         return 0
 
