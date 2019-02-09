@@ -4,8 +4,10 @@ RANKS = ['A', 'K', 'Q', 'J'] + list(map(str, range(10, 1, -1)))
 
 class PlayerCard:
     def __init__(self, card):
-        self.rank = RANKS.index(card['rank'])
+        self.rank = card['rank']
         self.suit = card['suit']
+        self.index = RANKS.index(card['rank'])
+        self.chen_value = int( CARD_VAL_MAP[self.rank] if self.rank in CARD_VAL_MAP else int(self.rank) / 2)
 
 
 class Player:
@@ -20,7 +22,7 @@ class Player:
         c1 = PlayerCard(player['hole_cards'][0])
         c2 = PlayerCard(player['hole_cards'][1])
 
-        if c1.rank + c2.rank >= 16:
+        if c1.chen_value + c2.chen_value >= 16:
             return current_buy_in - player['bet'] + minimum_raise
 
         if self.is_pair(c1, c2):
