@@ -13,7 +13,8 @@ TEST_SCALE_CONFIG = {
     HandType.DRILL: {'min': 100, 'max': 150},
     HandType.ROW: {'min': 300, 'max': 400},
     HandType.FLUSH: {'min': 500, 'max': 600},
-    HandType.FULL_HOUSE: {'min': 900, 'max': 1000}
+    HandType.FULL_HOUSE: {'min': 900, 'max': 1000},
+    HandType.POKER: {'min': 1100, 'max': 1200}
 }
 
 

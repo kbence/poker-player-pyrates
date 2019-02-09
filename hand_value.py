@@ -11,8 +11,9 @@ class HandType():
     TWO_PAIRS='two_pairs'
     DRILL='drill'
     ROW='row'
+    FLUSH = 'flush'
     FULL_HOUSE='full_house'
-    FLUSH='flush'
+    POKER='poker'
 
 
 DEFAULT_SCALE_CONFIG = {
@@ -21,7 +22,8 @@ DEFAULT_SCALE_CONFIG = {
     HandType.DRILL: {'min': 100, 'max': 150},
     HandType.ROW: {'min': 300, 'max': 400},
     HandType.FLUSH: {'min': 500, 'max': 600},
-    HandType.FULL_HOUSE: {'min': 900, 'max': 1000}
+    HandType.FULL_HOUSE: {'min': 900, 'max': 1000},
+    HandType.POKER: {'min': 1100, 'max': 1200}
 }
 
 
@@ -54,6 +56,12 @@ def get_cards_value(cards, scale_config=DEFAULT_SCALE_CONFIG):
     all_values.append(val)
 
     val = scale_hand_value(scale_config, HandType.FULL_HOUSE, get_full_value(cards))
+    all_values.append(val)
+
+    val = scale_hand_value(scale_config, HandType.FULL_HOUSE, get_full_value(cards))
+    all_values.append(val)
+
+    val = scale_hand_value(scale_config, HandType.POKER, get_poker_value(cards))
     all_values.append(val)
 
     return int(max(all_values))
