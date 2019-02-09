@@ -1,5 +1,4 @@
 import unittest
-from pprint import pprint
 
 import hand_value
 
@@ -7,11 +6,6 @@ SUITES = {'s': 'spades', 'h': 'hearts', 'c': 'clubs', 'd': 'diamonds'}
 
 
 class MyTestCase(unittest.TestCase):
-
-    def test_hand(self):
-        value = hand_value.get_value(test_state)
-        pprint(value)
-
     def test_pair_nothing(self):
         deck = to_deck([('A', 's'), ('J', 's'), ('9', 'c'), ('10', 'd'), ('4', 's')])
         value = hand_value.get_pair_value(deck)
