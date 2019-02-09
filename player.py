@@ -1,4 +1,8 @@
 
+class PlayerCard:
+    def __init__(self, ):
+
+
 class Player:
     VERSION = "Default Python 3 folding player"
 
@@ -21,7 +25,7 @@ class Player:
         c1_rank = ranks.index(c1_card['rank'])
         c2_rank = ranks.index(c2_card['rank'])
 
-        if c1_rank + c2_rank >= 18:
+        if c1_rank + c2_rank >= 16:
             return current_buy_in - player['bet'] + minimum_raise
 
         if player['hole_cards'][0]['rank'] == player['hole_cards'][1]['rank']:
