@@ -13,6 +13,7 @@ class HandType():
     FLUSH = 'flush'
     FULL_HOUSE='full_house'
     POKER='poker'
+    # TODO: STRAIGHT_FULSH, ROYAL_FLUSH
 
 
 DEFAULT_SCALE_CONFIG = {
@@ -65,6 +66,9 @@ def get_cards_value(cards=None, scale_config=DEFAULT_SCALE_CONFIG, hand_cards=No
     all_values.append(val)
 
     val = scale_hand_value(scale_config, HandType.DRILL, get_drill_value_with_own_hand(hand_cards, table_cards))
+    all_values.append(val)
+
+    val = scale_hand_value(scale_config, HandType.FLUSH, get_flush_value_with_own_hand(hand_cards, table_cards))
     all_values.append(val)
 
     val = scale_hand_value(scale_config, HandType.FULL_HOUSE, get_full_value(cards))
