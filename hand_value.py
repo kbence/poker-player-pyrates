@@ -155,6 +155,26 @@ def get_drill_value(cards):
     return highest_value
 
 
+def get_drill_value_with_own_hand(hand_cards, table_cards):
+    chen_hand_cards = set([PlayerCard(card) for card in hand_cards])
+    chen_table_cards = set([PlayerCard(card) for card in table_cards])
+
+    chen_cards = chen_hand_cards.union(chen_table_cards)
+
+    if len(chen_cards) < 3:
+        return 0
+
+    highest_value = 0
+    combos = combinations(chen_cards, 3)
+
+    for c in combos:
+        if c[0].rank == c[1].rank and c[1].rank == c[2].rank and  c[0].chen_value > highest_value \
+                and (c[0] in chen_hand_cards or c[1] in chen_hand_cards or c[2] in chen_hand_cards):
+            highest_value = c[0].chen_value
+
+    return highest_value
+
+
 def get_full_value(cards):
     if len(cards) < 5:
         return 0
