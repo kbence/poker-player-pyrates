@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class Player:
-    VERSION = "super-duper version"
+    VERSION = "NEW!!! Such Algorithm! Much Fun!"
 
     def __init__(self):
         self.log = logging.getLogger(__name__)
