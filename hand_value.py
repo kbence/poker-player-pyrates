@@ -1,7 +1,6 @@
 from itertools import combinations
 
-from player import PlayerCard
-
+from player_card import PlayerCard
 
 # scale within the same type eg. one pair
 SAME_TYPE_SCALE = 10

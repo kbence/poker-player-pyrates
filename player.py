@@ -2,22 +2,10 @@ import logging
 import math
 import operator
 
-CARD_VAL_MAP = {'A': 10, 'K': 8, 'Q': 7, 'J': 6}
-RANKS = ['A', 'K', 'Q', 'J'] + list(map(str, range(10, 1, -1)))
-
+from hand_value import get_deck_value
+from player_card import PlayerCard, RANKS
 
 logging.basicConfig(level=logging.DEBUG)
-
-
-class PlayerCard:
-    def __init__(self, card):
-        self.rank = card['rank']
-        self.suit = card['suit']
-        self.index = RANKS.index(card['rank'])
-        self.chen_value = int(math.ceil(CARD_VAL_MAP[self.rank] if self.rank in CARD_VAL_MAP else int(self.rank) / 2))
-
-    def __str__(self):
-        return '[{} {} {}]'.format(self.rank, self.suit, self.chen_value)
 
 
 class Player:
@@ -79,12 +67,19 @@ class Player:
                 return 0
 
         # Not a starting hand
-        if self.is_pair(c1, c2):
-            self.log.info('Minimum raise due to pair: {} {}', c1, c2)
-            if chen_sum >= 16:
-                return int(player['stack'], current_buy_in - player['bet'] + minimum_raise)
-            else:
-                return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
+        # if self.is_pair(c1, c2):
+        #     self.log.info('Minimum raise due to pair: {} {}', c1, c2)
+        #     if chen_sum >= 16:
+        #         return int(player['stack'], current_buy_in - player['bet'] + minimum_raise)
+        #     else:
+        #         return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
+
+        value = get_deck_value(game_state)
+        self.log.info('Deck value is estimated to: {}', value)
+
+        if value > 0:
+            raise_value = int(minimum_raise * (1 + value / 20))
+            return current_buy_in - player['bet'] + raise_value
 
         return 0
 
