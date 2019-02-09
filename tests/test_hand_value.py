@@ -91,6 +91,36 @@ class MyTestCase(unittest.TestCase):
         value = hand_value.get_full_value(deck)
         self.assertEqual(value, 10)
 
+    def test_poker_not_enough_cards(self):
+        deck = to_deck([('5', 's'), ('A', 'd')])
+        value = hand_value.get_poker_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_poker_nothing(self):
+        deck = to_deck([('5', 's'), ('A', 'd'), ('5', 'c'), ('A', 'h'), ('A', 's')])
+        value = hand_value.get_poker_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_poker_twos(self):
+        deck = to_deck([('2', 's'), ('2', 'd'), ('5', 'c'), ('2', 'h'), ('2', 'h')])
+        value = hand_value.get_poker_value(deck)
+        self.assertEqual(value, 1)
+
+    def test_poker_fives(self):
+        deck = to_deck([('5', 's'), ('5', 'd'), ('5', 'c'), ('2', 'h'), ('5', 'h')])
+        value = hand_value.get_poker_value(deck)
+        self.assertEqual(value, 3)
+
+    def test_poker_kings(self):
+        deck = to_deck([('K', 's'), ('5', 'd'), ('K', 'c'), ('K', 'h'), ('K', 'd')])
+        value = hand_value.get_poker_value(deck)
+        self.assertEqual(value, 8)
+
+    def test_poker_j(self):
+        deck = to_deck([('K', 's'), ('J', 's'), ('J', 'c'), ('J', 'h'), ('J', 'd')])
+        value = hand_value.get_poker_value(deck)
+        self.assertEqual(value, 6)
+
 
 def to_card(rank, s):
     suite = SUITES[s]
