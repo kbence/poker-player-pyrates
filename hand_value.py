@@ -11,7 +11,6 @@ def get_value(state):
     all_cards.extend(state['community_cards'])
 
 
-
 def get_self(players):
     for player in players:
         if player['name'] == 'PyRates':
