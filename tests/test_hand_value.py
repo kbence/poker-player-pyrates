@@ -148,7 +148,38 @@ class MyTestCase(unittest.TestCase):
 
         value = hand_value.get_pair_value_with_own_hand(own, table)
         self.assertEqual(value, 6)
+    #row testing
 
+    def test_row_not_enough_cards(self):
+        deck = to_deck([('5', 's'), ('A', 'd')])
+        value = hand_value.get_row_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_row_nothing(self):
+        deck = to_deck([('5', 's'), ('A', 'd'), ('5', 'c'), ('A', 'h'), ('A', 's')])
+        value = hand_value.get_row_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_row_from_two(self):
+        deck = to_deck([('2', 's'), ('3', 'd'), ('4', 'c'), ('5', 'h'), ('6', 'h')])
+        value = hand_value.get_row_value(deck)
+        self.assertEqual(value, 3)
+
+    def test_row_from_six(self):
+        deck = to_deck([('6', 's'), ('7', 'd'), ('8', 'c'), ('9', 'h'), ('J', 'h')])
+        value = hand_value.get_row_value(deck)
+        self.assertEqual(value, 6)
+
+    def test_row_random_from_eight(self):
+        deck = to_deck([('Q', 's'), ('9', 'd'), ('8', 'c'), ('J', 'h'), ('10', 'd')])
+        value = hand_value.get_row_value(deck)
+        self.assertEqual(value, 7)
+
+    def test_row_one_missed(self):
+        deck = to_deck([('Q', 's'), ('9', 'd'), ('8', 'c'), ('J', 'h'), ('2', 'd')])
+        value = hand_value.get_row_value(deck)
+        self.assertEqual(value, 0)
+    #row testting end
 
 def to_card(rank, s):
     suite = SUITES[s]

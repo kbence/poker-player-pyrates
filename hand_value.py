@@ -54,6 +54,9 @@ def get_cards_value(cards, scale_config=DEFAULT_SCALE_CONFIG):
     val = scale_hand_value(scale_config, HandType.DRILL, get_drill_value(cards))
     all_values.append(val)
 
+    val = scale_hand_value(scale_config, HandType.ROW, get_row_value(cards))
+    all_values.append(val)
+
     val = scale_hand_value(scale_config, HandType.FULL_HOUSE, get_full_value(cards))
     all_values.append(val)
 
@@ -201,3 +204,31 @@ def get_poker_value(cards):
             highest_value = c[0].chen_value
 
     return highest_value
+
+
+def get_row_value(cards):
+    if len(cards)<5:
+        return 0
+
+    chen_cards = [PlayerCard(card) for card in cards]
+
+    for i in range(len(chen_cards)):
+        playing_cards.append(i)
+        playing_cards_set.add(i)
+
+    counter=0
+
+    playing_cards.sort(reverese=True)
+
+
+    if(len(playing_cards)>=5):
+        for i in range(len(playing_cards)-1):
+            if(playing_cards[i].index-playing_cards[i+1].index)==1:
+                counter+=1
+                if counter==5 :
+                    return playing_cards[i-3].chen_value
+            else:
+                counter=0
+        return 0
+    else:
+        return 0

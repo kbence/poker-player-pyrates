@@ -14,3 +14,6 @@ class PlayerCard:
 
     def __str__(self):
         return '[{} {} {}]'.format(self.rank, self.suit, self.chen_value)
+
+    def __lt__(self, other):
+        return self.index>other.index

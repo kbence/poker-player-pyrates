@@ -111,3 +111,5 @@ class Player:
         if gap <= 1 and c1.index > RANKS.index('Q') and c2.index > RANKS.index('Q'):
             return 1
         return 0
+
+
