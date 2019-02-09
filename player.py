@@ -15,7 +15,7 @@ class PlayerCard:
         self.chen_value = int( CARD_VAL_MAP[self.rank] if self.rank in CARD_VAL_MAP else int(self.rank) / 2)
 
     def __str__(self):
-        return '[{} {}]'.format(self.rank, self.suit)
+        return '[{} {} {}]'.format(self.rank, self.suit, self.chen_value)
 
 
 class Player:
@@ -34,6 +34,8 @@ class Player:
         c1 = PlayerCard(player['hole_cards'][0])
         c2 = PlayerCard(player['hole_cards'][1])
 
+        self.log.info(c1)
+        self.log.info(c2)
         if c1.chen_value + c2.chen_value >= 16:
             self.log.info('Minimum raise due to high cards: {} {}', c1, c2)
             return current_buy_in - player['bet'] + minimum_raise
