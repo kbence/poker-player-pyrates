@@ -1,4 +1,5 @@
 import unittest
+from pprint import pprint
 
 import hand_value
 
@@ -9,7 +10,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_hand(self):
         value = hand_value.get_value(test_state)
-        print(value)
+        pprint(value)
 
     def test_pair_nothing(self):
         deck = to_deck([('A', 's'), ('J', 's'), ('9', 'c'), ('10', 'd'), ('4', 's')])
@@ -75,6 +76,26 @@ class MyTestCase(unittest.TestCase):
         deck = to_deck([('5', 's'), ('2', 'd'), ('5', 'c'), ('A', 'h'), ('5', 'h')])
         value = hand_value.get_drill_value(deck)
         self.assertEqual(value, 3)
+
+    def test_full_not_enough_cards(self):
+        deck = to_deck([('5', 's'), ('2', 'd'), ('5', 'c'), ('A', 'h')])
+        value = hand_value.get_full_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_full_nothing(self):
+        deck = to_deck([('5', 's'), ('2', 'd'), ('5', 'c'), ('A', 'h'), ('A', 's')])
+        value = hand_value.get_full_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_full_fives(self):
+        deck = to_deck([('5', 's'), ('5', 'd'), ('5', 'c'), ('2', 'h'), ('2', 's')])
+        value = hand_value.get_full_value(deck)
+        self.assertEqual(value, 3)
+
+    def test_full_aces(self):
+        deck = to_deck([('5', 's'), ('A', 'd'), ('5', 'c'), ('A', 'h'), ('A', 's')])
+        value = hand_value.get_full_value(deck)
+        self.assertEqual(value, 10)
 
 
 def to_card(rank, s):
