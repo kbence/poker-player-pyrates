@@ -1,4 +1,3 @@
-from enum import Enum
 from itertools import combinations
 
 from player import PlayerCard
@@ -6,7 +5,7 @@ from player import PlayerCard
 # scale within the same type eg. one pair
 SAME_TYPE_SCALE = 10
 
-class HandType(Enum):
+class HandType():
     PAIR='pair'
     TWO_PAIRS='two_pairs'
     DRILL='drill'
@@ -60,7 +59,7 @@ def scale_hand_value(config, hand_type, value):
         return 0
     type_config = config[hand_type]
     diff = type_config['max'] - type_config['min']
-    normalized_value = value / SAME_TYPE_SCALE
+    normalized_value = float(value) / SAME_TYPE_SCALE
     return type_config['min'] + diff * normalized_value
 
 
