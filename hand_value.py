@@ -214,6 +214,45 @@ def get_full_value(cards):
     return highest_value_r1 if highest_value_r2 else 0
 
 
+def get_flush_value_with_own_hand(hand_cards, table_cards):
+    l_chen_hand_cards = [PlayerCard(card) for card in hand_cards]
+    l_chen_table_cards = [PlayerCard(card) for card in table_cards]
+
+    chen_hand_cards = set(l_chen_hand_cards)
+    chen_table_cards = set(l_chen_table_cards)
+
+    chen_cards = chen_hand_cards.union(chen_table_cards)
+
+    if len(chen_cards) < 5:
+        return 0
+
+    if l_chen_hand_cards[0].suit == l_chen_hand_cards[1].suit:
+        same = 0
+        highest = max(l_chen_hand_cards[0].chen_value, l_chen_hand_cards[1].chen_value)
+
+        for c in l_chen_table_cards:
+            if c.suit == l_chen_hand_cards[0].suit:
+                same += 1
+                highest = max(highest, c.chen_value)
+
+        if same >= 3:
+            return highest
+    else:
+        for s in l_chen_hand_cards:
+            same = 0
+            highest = s.chen_value
+
+            for c in l_chen_table_cards:
+                if c.suit == s.suit:
+                    same += 1
+                    highest = max(highest, c.chen_value)
+
+            if same >= 4:
+                return highest
+
+    return 0
+
+
 def get_poker_value(cards):
     if len(cards) < 4:
         return 0

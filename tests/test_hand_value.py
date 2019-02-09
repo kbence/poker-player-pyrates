@@ -191,6 +191,34 @@ class MyTestCase(unittest.TestCase):
         value = hand_value.get_drill_value_with_own_hand(own, table)
         self.assertEqual(value, 6)
 
+    def test_flush_not_enough_cards(self):
+        own = to_deck([('A', 's'), ('J', 's')])
+        table = to_deck([('J', 'c'), ('2', 'h')])
+
+        value = hand_value.get_flush_value_with_own_hand(own, table)
+        self.assertEqual(value, 0)
+
+    def test_flush_nope(self):
+        own = to_deck([('A', 's'), ('J', 's')])
+        table = to_deck([('J', 'c'), ('2', 'h'), ('2', 'h')])
+
+        value = hand_value.get_flush_value_with_own_hand(own, table)
+        self.assertEqual(value, 0)
+
+    def test_flush_ten(self):
+        own = to_deck([('A', 's'), ('10', 'h')])
+        table = to_deck([('9', 'h'), ('5', 'h'), ('2', 'h'), ('2', 'd'), ('3', 'h')])
+
+        value = hand_value.get_flush_value_with_own_hand(own, table)
+        self.assertEqual(value, 5)
+
+    def test_flush_best(self):
+        own = to_deck([('A', 'h'), ('10', 'h')])
+        table = to_deck([('9', 'h'), ('5', 'h'), ('2', 'h'), ('2', 'd'), ('3', 'h')])
+
+        value = hand_value.get_flush_value_with_own_hand(own, table)
+        self.assertEqual(value, 10)
+
 
 def to_card(rank, s):
     suite = SUITES[s]
