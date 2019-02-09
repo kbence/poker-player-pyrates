@@ -84,6 +84,9 @@ def get_pair_value(cards):
 
 
 def get_two_pair_value(cards):
+    if len(cards) < 4:
+        return 0
+
     chen_cards = set([PlayerCard(card) for card in cards])
 
     highest_value_r1 = 0
@@ -108,6 +111,9 @@ def get_two_pair_value(cards):
 
 
 def get_drill_value(cards):
+    if len(cards) < 3:
+        return 0
+
     chen_cards = [PlayerCard(card) for card in cards]
 
     highest_value = 0
@@ -121,10 +127,10 @@ def get_drill_value(cards):
 
 
 def get_full_value(cards):
-    chen_cards = set([PlayerCard(card) for card in cards])
-
-    if len(chen_cards) < 5:
+    if len(cards) < 5:
         return 0
+
+    chen_cards = set([PlayerCard(card) for card in cards])
 
     highest_value_r1 = 0
     matches_r1 = set()
@@ -147,3 +153,22 @@ def get_full_value(cards):
 
     # Use the value of the drill
     return highest_value_r1 if highest_value_r2 else 0
+
+
+def get_poker_value(cards):
+    if len(cards) < 4:
+        return 0
+
+    chen_cards = [PlayerCard(card) for card in cards]
+
+    highest_value = 0
+    combos = combinations(chen_cards, 4)
+
+    for c in combos:
+        if c[0].rank == c[1].rank \
+                and c[1].rank == c[2].rank \
+                and c[2].rank == c[3].rank \
+                and c[0].chen_value > highest_value:
+            highest_value = c[0].chen_value
+
+    return highest_value
