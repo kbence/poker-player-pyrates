@@ -19,7 +19,7 @@ class GameStateLogger(object):
 
 
 class Player:
-    VERSION = "Special algorithm update2"
+    VERSION = "Kamikazeee!"
 
     def betRequest(self, game_state):
         self.log = GameStateLogger(game_state)
