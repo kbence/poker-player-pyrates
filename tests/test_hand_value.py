@@ -11,15 +11,20 @@ class MyTestCase(unittest.TestCase):
         value = hand_value.get_value(test_state)
         print(value)
 
-    def test_pair(self):
+    def test_pair_tens(self):
         deck = to_deck([('A', 's'), ('J', 's'), ('10', 'c'), ('10', 'd'), ('4', 's')])
         value = hand_value.get_pair_value(deck)
-        self.assertGreater(value, 0.0)
+        self.assertEqual(value, 5)
+
+    def test_pair_aces(self):
+        deck = to_deck([('A', 's'), ('J', 's'), ('A', 'c'), ('10', 'd'), ('4', 's')])
+        value = hand_value.get_pair_value(deck)
+        self.assertEqual(value, 10)
 
 
 def to_card(rank, s):
     suite = SUITES[s]
-    return {'rank': rank, 'suite': suite}
+    return {'rank': rank, 'suit': suite}
 
 
 def to_deck(cards):
