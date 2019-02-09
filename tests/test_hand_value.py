@@ -2,53 +2,64 @@ import unittest
 
 import hand_value
 
+SUITES = {'s': 'spades', 'h': 'hearts', 'c': 'clubs', 'd': 'diamonds'}
+
+
+class MyTestCase(unittest.TestCase):
+
+    def test_hand(self):
+        value = hand_value.get_value(test_state)
+        print(value)
+
+    def test_pair(self):
+        deck = to_deck([('A', 's'), ('J', 's'), ('10', 'c'), ('10', 'd'), ('4', 's')])
+        value = hand_value.get_pair_value(deck)
+        self.assertGreater(value, 0.0)
+
+
+def to_card(rank, s):
+    suite = SUITES[s]
+    return {'rank': rank, 'suite': suite}
+
+
+def to_deck(cards):
+    return [to_card(c[0], c[1]) for c in cards]
+
+
+if __name__ == '__main__':
+    unittest.main()
+
+
 test_state = {
     "tournament_id":"550d1d68cd7bd10003000003",     # Id of the current tournament
-
     "game_id":"550da1cb2d909006e90004b1",           # Id of the current sit'n'go game. You can use this to link a
                                                     # sequence of game states together for logging purposes, or to
                                                     # make sure that the same strategy is played for an entire game
-
     "round":0,                                      # Index of the current round within a sit'n'go
-
     "bet_index":0,                                  # Index of the betting opportunity within a round
-
     "small_blind": 10,                              # The small blind in the current round. The big blind is twice the
                                                     #     small blind
-
     "current_buy_in": 320,                          # The amount of the largest current bet from any one player
-
     "pot": 400,                                     # The size of the pot (sum of the player bets)
-
     "minimum_raise": 240,                           # Minimum raise amount. To raise you have to return at least:
                                                     #     current_buy_in - players[in_action][bet] + minimum_raise
-
     "dealer": 1,                                    # The index of the player on the dealer button in this round
                                                     #     The first player is (dealer+1)%(players.length)
-
     "orbits": 7,                                    # Number of orbits completed. (The number of times the dealer
                                                     #     button returned to the same player.)
-
     "in_action": 1,                                 # The index of your player, in the players array
-
     "players": [                                    # An array of the players. The order stays the same during the
         {                                           #     entire tournament
-
             "id": 0,                                # Id of the player (same as the index)
-
             "name": "Albert",                       # Name specified in the tournament config
-
             "status": "active",                     # Status of the player:
                                                     #   - active: the player can make bets, and win the current pot
                                                     #   - folded: the player folded, and gave up interest in
                                                     #       the current pot. They can return in the next round.
                                                     #   - out: the player lost all chips, and is out of this sit'n'go
-
             "version": "Default random player",     # Version identifier returned by the player
-
             "stack": 1010,                          # Amount of chips still available for the player. (Not including
                                                     #     the chips the player bet in this round.)
-
             "bet": 320                              # The amount of chips the player put into the pot
         },
         {
@@ -94,13 +105,3 @@ test_state = {
         }
     ]
 }
-
-class MyTestCase(unittest.TestCase):
-
-    def test_hand(self):
-        value = hand_value.get_value(test_state)
-        print(value)
-
-
-if __name__ == '__main__':
-    unittest.main()
