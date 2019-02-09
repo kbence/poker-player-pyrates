@@ -16,5 +16,6 @@ class TestPlayer(unittest.TestCase):
 
     def test_responds_something(self):
         result = self.player.betRequest(self.game_state)
+        print(result)
 
         self.assertIsInstance(result, int)
