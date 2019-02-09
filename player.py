@@ -67,8 +67,10 @@ class Player:
                     when_to_raise = 8
                 else:
                     when_to_raise = 7
+                self.log.info('We are going to raise over Chen value {}', when_to_raise)
             else:
                 self.log.info('We dont care about positions')
+
 
             if chen_sum >= when_to_raise:
                 self.log.info('CHEN value of hand is %s, raising' % chen_sum)
@@ -77,20 +79,15 @@ class Player:
                 self.log.info('CHEN value of hand is %s, folding' % chen_sum)
                 return 0
 
-        # Not a starting hand
-        # if self.is_pair(c1, c2):
-        #     self.log.info('Minimum raise due to pair: {} {}', c1, c2)
-        #     if chen_sum >= 16:
-        #         return int(player['stack'], current_buy_in - player['bet'] + minimum_raise)
-        #     else:
-        #         return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
-
         value = get_deck_value(game_state)
         self.log.info('Deck value is estimated to: %d' % value)
 
         if value > 0:
             raise_value = int(minimum_raise * (1 + value / 20))
+            self.log.info('Raising by {}', raise_value)
             return current_buy_in - player['bet'] + raise_value
+        else:
+            self.log.info('We have nothing, let\'s fold')
 
         return 0
 
