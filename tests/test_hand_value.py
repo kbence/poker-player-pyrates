@@ -44,7 +44,7 @@ class MyTestCase(unittest.TestCase):
     def test_2_pair_threes(self):
         deck = to_deck([('2', 's'), ('2', 'd'), ('3', 'c'), ('A', 'h'), ('3', 'h')])
         value = hand_value.get_two_pair_value(deck)
-        self.assertEqual(value, 2)
+        self.assertEqual(value, 1)
 
     def test_drill_nothing(self):
         deck = to_deck([('2', 's'), ('2', 'd'), ('3', 'c')])
@@ -69,7 +69,7 @@ class MyTestCase(unittest.TestCase):
     def test_drill_fives(self):
         deck = to_deck([('5', 's'), ('2', 'd'), ('5', 'c'), ('A', 'h'), ('5', 'h')])
         value = hand_value.get_drill_value(deck)
-        self.assertEqual(value, 3)
+        self.assertEqual(value, 2)
 
     def test_full_not_enough_cards(self):
         deck = to_deck([('5', 's'), ('2', 'd'), ('5', 'c'), ('A', 'h')])
@@ -84,7 +84,7 @@ class MyTestCase(unittest.TestCase):
     def test_full_fives(self):
         deck = to_deck([('5', 's'), ('5', 'd'), ('5', 'c'), ('2', 'h'), ('2', 's')])
         value = hand_value.get_full_value(deck)
-        self.assertEqual(value, 3)
+        self.assertEqual(value, 2)
 
     def test_full_aces(self):
         deck = to_deck([('5', 's'), ('A', 'd'), ('5', 'c'), ('A', 'h'), ('A', 's')])
@@ -109,7 +109,7 @@ class MyTestCase(unittest.TestCase):
     def test_poker_fives(self):
         deck = to_deck([('5', 's'), ('5', 'd'), ('5', 'c'), ('2', 'h'), ('5', 'h')])
         value = hand_value.get_poker_value(deck)
-        self.assertEqual(value, 3)
+        self.assertEqual(value, 2)
 
     def test_poker_kings(self):
         deck = to_deck([('K', 's'), ('5', 'd'), ('K', 'c'), ('K', 'h'), ('K', 'd')])
