@@ -19,7 +19,7 @@ class PlayerCard:
 
 
 class Player:
-    VERSION = "Default Python 3 folding player"
+    VERSION = "super-duper version"
 
     def __init__(self):
         self.log = logging.getLogger(__name__)
