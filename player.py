@@ -8,6 +8,16 @@ from player_card import PlayerCard, RANKS
 logging.basicConfig(level=logging.DEBUG)
 
 
+class GameStateLogger(object):
+    def __init__(self, game_state):
+        self.game_state = game_state
+        self.log = logging.getLogger(__name__)
+        self.prefix = '{} '.format(game_state['game_id'])
+
+    def info(self, msg, *args, **kwargs):
+        self.log.info(self.prefix + msg.format(*args, **kwargs))
+
+
 class Player:
     VERSION = "NEW!!! Such Algorithm! Much Fun!"
 
@@ -16,6 +26,7 @@ class Player:
         self.log.setLevel(logging.DEBUG)
 
     def betRequest(self, game_state):
+        self.log = GameStateLogger(game_state)
 
         current_buy_in = game_state['current_buy_in']
         player = game_state['players'][game_state['in_action']]
