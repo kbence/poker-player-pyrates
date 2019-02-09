@@ -11,6 +11,11 @@ class MyTestCase(unittest.TestCase):
         value = hand_value.get_value(test_state)
         print(value)
 
+    def test_pair_nothing(self):
+        deck = to_deck([('A', 's'), ('J', 's'), ('9', 'c'), ('10', 'd'), ('4', 's')])
+        value = hand_value.get_pair_value(deck)
+        self.assertEqual(value, 0)
+
     def test_pair_tens(self):
         deck = to_deck([('A', 's'), ('J', 's'), ('10', 'c'), ('10', 'd'), ('4', 's')])
         value = hand_value.get_pair_value(deck)
@@ -20,6 +25,56 @@ class MyTestCase(unittest.TestCase):
         deck = to_deck([('A', 's'), ('J', 's'), ('A', 'c'), ('10', 'd'), ('4', 's')])
         value = hand_value.get_pair_value(deck)
         self.assertEqual(value, 10)
+
+    def test_2_pair_nothing(self):
+        deck = to_deck([('A', 's'), ('J', 's'), ('9', 'c'), ('10', 'd'), ('4', 's')])
+        value = hand_value.get_two_pair_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_2_pair_nothing_2(self):
+        deck = to_deck([('A', 's'), ('J', 's'), ('A', 'c'), ('10', 'd'), ('4', 's')])
+        value = hand_value.get_two_pair_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_2_pair_aces(self):
+        deck = to_deck([('A', 's'), ('A', 'd'), ('2', 'c'), ('2', 'h'), ('4', 's')])
+        value = hand_value.get_two_pair_value(deck)
+        self.assertEqual(value, 10)
+
+    def test_2_pair_eights(self):
+        deck = to_deck([('4', 's'), ('4', 'd'), ('8', 'c'), ('A', 'h'), ('8', 'h')])
+        value = hand_value.get_two_pair_value(deck)
+        self.assertEqual(value, 4)
+
+    def test_2_pair_threes(self):
+        deck = to_deck([('2', 's'), ('2', 'd'), ('3', 'c'), ('A', 'h'), ('3', 'h')])
+        value = hand_value.get_two_pair_value(deck)
+        self.assertEqual(value, 2)
+
+    def test_drill_nothing(self):
+        deck = to_deck([('2', 's'), ('2', 'd'), ('3', 'c')])
+        value = hand_value.get_drill_value(deck)
+        self.assertEqual(value, 0)
+
+    def test_drill_simple(self):
+        deck = to_deck([('2', 's'), ('2', 'd'), ('2', 'c')])
+        value = hand_value.get_drill_value(deck)
+        self.assertEqual(value, 1)
+
+    def test_drill_queens(self):
+        deck = to_deck([('Q', 's'), ('Q', 'd'), ('2', 'c'), ('Q', 's')])
+        value = hand_value.get_drill_value(deck)
+        self.assertEqual(value, 7)
+
+    def test_drill_aces(self):
+        deck = to_deck([('2', 's'), ('A', 'd'), ('3', 'c'), ('A', 'h'), ('A', 'h')])
+        value = hand_value.get_drill_value(deck)
+        self.assertEqual(value, 10)
+
+    def test_drill_fives(self):
+        deck = to_deck([('5', 's'), ('2', 'd'), ('5', 'c'), ('A', 'h'), ('5', 'h')])
+        value = hand_value.get_drill_value(deck)
+        self.assertEqual(value, 3)
 
 
 def to_card(rank, s):
