@@ -19,7 +19,7 @@ class MyTestCase(unittest.TestCase):
 
 def to_card(rank, s):
     suite = SUITES[s]
-    return {'rank': rank, 'suite': suite}
+    return {'rank': rank, 'suit': suite}
 
 
 def to_deck(cards):
