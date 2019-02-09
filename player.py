@@ -8,14 +8,25 @@ from player_card import PlayerCard, RANKS
 logging.basicConfig(level=logging.DEBUG)
 
 
+class GameStateLogger(object):
+    def __init__(self, game_state):
+        self.game_state = game_state
+        self.log = logging.getLogger(__name__)
+        self.prefix = '{} '.format(game_state['game_id'])
+
+    def info(self, msg, *args, **kwargs):
+        self.log.info(self.prefix + msg.format(*args, **kwargs))
+
+
 class Player:
-    VERSION = "NEW!!! Such Algorithm! Much Fun!"
+    VERSION = "Special algorithm update1"
 
     def __init__(self):
         self.log = logging.getLogger(__name__)
         self.log.setLevel(logging.DEBUG)
 
     def betRequest(self, game_state):
+        self.log = GameStateLogger(game_state)
 
         current_buy_in = game_state['current_buy_in']
         player = game_state['players'][game_state['in_action']]
@@ -56,8 +67,10 @@ class Player:
                     when_to_raise = 8
                 else:
                     when_to_raise = 7
+                self.log.info('We are going to raise over Chen value {}', when_to_raise)
             else:
                 self.log.info('We dont care about positions')
+
 
             if chen_sum >= when_to_raise:
                 self.log.info('CHEN value of hand is %s, raising' % chen_sum)
@@ -66,20 +79,16 @@ class Player:
                 self.log.info('CHEN value of hand is %s, folding' % chen_sum)
                 return 0
 
-        # Not a starting hand
-        # if self.is_pair(c1, c2):
-        #     self.log.info('Minimum raise due to pair: {} {}', c1, c2)
-        #     if chen_sum >= 16:
-        #         return int(player['stack'], current_buy_in - player['bet'] + minimum_raise)
-        #     else:
-        #         return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
-
         value = get_deck_value(game_state)
         self.log.info('Deck value is estimated to: %d' % value)
 
         if value > 0:
-            raise_value = int(minimum_raise * (1 + value / 20))
+            max_raise = int(minimum_raise * (1 + value / 20))
+            raise_value = min(minimum_raise, max_raise // 2)
+            self.log.info('Raising by {}, max raise is', raise_value, max_raise)
             return current_buy_in - player['bet'] + raise_value
+        else:
+            self.log.info('We have nothing, let\'s fold')
 
         return 0
 
