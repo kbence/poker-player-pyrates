@@ -75,7 +75,7 @@ class Player:
         #         return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
 
         value = get_deck_value(game_state)
-        self.log.info('Deck value is estimated to: {}', value)
+        self.log.info('Deck value is estimated to: %d' % value)
 
         if value > 0:
             raise_value = int(minimum_raise * (1 + value / 20))
