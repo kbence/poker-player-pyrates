@@ -8,7 +8,7 @@ SUITES = {'s': 'spades', 'h': 'hearts', 'c': 'clubs', 'd': 'diamonds'}
 class MyTestCase(unittest.TestCase):
 
     def test_hand(self):
-        value = hand_value.get_value(test_state)
+        value = hand_value.get_deck_value(test_state)
         print(value)
 
     def test_pair_nothing(self):

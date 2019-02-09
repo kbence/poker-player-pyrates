@@ -1,14 +1,67 @@
+from enum import Enum
 from itertools import combinations
 
 from player import PlayerCard
 
+# scale within the same type eg. one pair
+SAME_TYPE_SCALE = 10
 
-def get_value(state):
+class HandType(Enum):
+    PAIR='pair'
+    TWO_PAIRS='two_pairs'
+    DRILL='drill'
+    ROW='row'
+    FULL_HOUSE='full_house'
+    FLUSH='flush'
+
+
+def get_deck_value(game_state):
+    cards = get_cards(game_state)
+    return get_cards_value(cards)
+
+
+def get_cards(game_state):
     all_cards = []
-    player = get_self(state['players'])
+    player = get_self(game_state['players'])
 
     all_cards.extend(player['hole_cards'])
-    all_cards.extend(state['community_cards'])
+    all_cards.extend(game_state['community_cards'])
+    return all_cards
+
+
+def get_cards_value(cards):
+    scale_config = {
+        HandType.PAIR: {'min': 0, 'max': 10},
+        HandType.TWO_PAIRS : {'min': 20, 'max': 40},
+        HandType.DRILL: {'min': 100, 'max': 150},
+        HandType.ROW: {'min': 300, 'max': 400},
+        HandType.FLUSH: {'min': 500, 'max': 600},
+        HandType.FULL_HOUSE: {'min': 900, 'max': 1000}
+    }
+
+    # Values by hand type
+    all_values = []
+
+    val = scale_hand_value(scale_config, HandType.PAIR, get_pair_value(cards))
+    all_values.append(val)
+
+    val = scale_hand_value(scale_config, HandType.TWO_PAIRS, get_two_pair_value(cards))
+    all_values.append(val)
+
+    val = scale_hand_value(scale_config, HandType.DRILL, get_drill_value(cards))
+    all_values.append(val)
+
+    return int(max(all_values))
+
+def scale_hand_value(config, hand_type, value):
+    value = int(value) # just to make sure
+    # We don't have this hand type
+    if value == 0:
+        return 0
+    type_config = config[hand_type]
+    diff = type_config['max'] - type_config['min']
+    normalized_value = value / SAME_TYPE_SCALE
+    return type_config['min'] + diff * normalized_value
 
 
 def get_self(players):
