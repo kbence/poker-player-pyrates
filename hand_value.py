@@ -27,8 +27,13 @@ DEFAULT_SCALE_CONFIG = {
 
 
 def get_deck_value(game_state):
-    cards = get_cards(game_state)
-    return get_cards_value(cards)
+
+    player = get_self(game_state['players'])
+    hand_cards = player['hole_cards']
+
+    table_cards = game_state['community_cards']
+
+    return get_cards_value(hand_cards=hand_cards, table_cards=table_cards)
 
 
 def get_cards(game_state):
@@ -40,21 +45,26 @@ def get_cards(game_state):
     return all_cards
 
 
-def get_cards_value(cards, scale_config=DEFAULT_SCALE_CONFIG):
+def get_cards_value(cards=None, scale_config=DEFAULT_SCALE_CONFIG, hand_cards=None, table_cards=None):
+
+    if not cards:
+        cards = list(hand_cards)
+        cards.extend(table_cards)
+    if not table_cards:
+        table_cards = []
+    if not hand_cards:
+        hand_cards = cards
 
     # Values by hand type
     all_values = []
 
-    val = scale_hand_value(scale_config, HandType.PAIR, get_pair_value(cards))
+    val = scale_hand_value(scale_config, HandType.PAIR, get_pair_value_with_own_hand(hand_cards, table_cards))
     all_values.append(val)
 
     val = scale_hand_value(scale_config, HandType.TWO_PAIRS, get_two_pair_value(cards))
     all_values.append(val)
 
-    val = scale_hand_value(scale_config, HandType.DRILL, get_drill_value(cards))
-    all_values.append(val)
-
-    val = scale_hand_value(scale_config, HandType.FULL_HOUSE, get_full_value(cards))
+    val = scale_hand_value(scale_config, HandType.DRILL, get_drill_value_with_own_hand(hand_cards, table_cards))
     all_values.append(val)
 
     val = scale_hand_value(scale_config, HandType.FULL_HOUSE, get_full_value(cards))
