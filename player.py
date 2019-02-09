@@ -19,7 +19,7 @@ class GameStateLogger(object):
 
 
 class Player:
-    VERSION = "NEW!!! Such Algorithm! Much Fun!"
+    VERSION = "Special algorithm update1"
 
     def __init__(self):
         self.log = logging.getLogger(__name__)
