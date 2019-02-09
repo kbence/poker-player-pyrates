@@ -1,4 +1,6 @@
 import logging
+import math
+import operator
 
 CARD_VAL_MAP = {'A': 10, 'K': 8, 'Q': 7, 'J': 6}
 RANKS = ['A', 'K', 'Q', 'J'] + list(map(str, range(10, 1, -1)))
@@ -34,21 +36,63 @@ class Player:
         c1 = PlayerCard(player['hole_cards'][0])
         c2 = PlayerCard(player['hole_cards'][1])
 
-        self.log.info(c1)
-        self.log.info(c2)
-        if c1.chen_value + c2.chen_value >= 16:
-            self.log.info('Minimum raise due to high cards: {} {}', c1, c2)
-            return current_buy_in - player['bet'] + minimum_raise
+        chen_sum = 0
+        high_card = sorted([c1, c2], key=operator.attrgetter('chen_value'), reverse=True)[0]
+
+        chen_sum += high_card.chen_value
+        self.log.info(chen_sum)
 
         if self.is_pair(c1, c2):
+            chen_sum += high_card.chen_value * 2
+            self.log.info(chen_sum)
+
+        if self.is_suited(c1, c2):
+            chen_sum += 2
+            self.log.info(chen_sum)
+
+        gap = self.calc_gap(c1, c2)
+        self.log.info(gap)
+        chen_sum -= gap
+
+        chen_sum += self.calc_extra_point(c1, c2, gap)
+
+        chen_sum = math.ceil(chen_sum)
+
+        # Starting hand calculation
+        if len(game_state['community_cards']) == 0:
+            self.log.info('CHEN')
+            if chen_sum >= 9:
+                self.log.info('Minimum raise due to high cards: {} {}', c1, c2)
+                return min(player['stack'], current_buy_in - player['bet'] + minimum_raise)
+            else:
+                return 0
+
+        # Not a starting hand
+        if self.is_pair(c1, c2):
             self.log.info('Minimum raise due to pair: {} {}', c1, c2)
-            return current_buy_in - player['bet'] + minimum_raise * 2
+            return min(player['stack'], current_buy_in - player['bet'] + minimum_raise)
 
         return 0
 
     def showdown(self, game_state):
         pass
 
+
+
     @staticmethod
     def is_pair(c1, c2):
         return c1.rank == c2.rank
+
+    @staticmethod
+    def is_suited(c1, c2):
+        return c1.suit == c2.suit
+
+    @staticmethod
+    def calc_gap(c1, c2):
+        return min(4, abs(c1.index - c2.index))
+
+    @staticmethod
+    def calc_extra_point(c1, c2, gap):
+        if gap <= 1 and c1.index > RANKS.index('Q') and c2.index > RANKS.index('Q'):
+            return 1
+        return 0
