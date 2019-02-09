@@ -21,7 +21,7 @@ class PlayerCard:
 
 
 class Player:
-    VERSION = "super-duper (python3?) version"
+    VERSION = "super-duper version"
 
     def __init__(self):
         self.log = logging.getLogger(__name__)
