@@ -62,8 +62,7 @@ class Player:
         if len(game_state['community_cards']) == 0:
             self.log.info('CHEN')
             if chen_sum >= 9:
-                self.log.info('Minimum raise due to high cards: {} {}', c1, c2)
-                return min(player['stack'], current_buy_in - player['bet'] + minimum_raise)
+                return min(player['stack'] * 30, current_buy_in - player['bet'] + minimum_raise)
             else:
                 return 0
 
