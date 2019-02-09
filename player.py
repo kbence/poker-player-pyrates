@@ -41,18 +41,14 @@ class Player:
         high_card = sorted([c1, c2], key=operator.attrgetter('chen_value'), reverse=True)[0]
 
         chen_sum += high_card.chen_value
-        self.log.info(chen_sum)
 
         if self.is_pair(c1, c2):
             chen_sum += high_card.chen_value * 2
-            self.log.info(chen_sum)
 
         if self.is_suited(c1, c2):
             chen_sum += 2
-            self.log.info(chen_sum)
 
         gap = self.calc_gap(c1, c2)
-        self.log.info(gap)
         chen_sum -= gap
 
         chen_sum += self.calc_extra_point(c1, c2, gap)
@@ -61,19 +57,25 @@ class Player:
 
         # Starting hand calculation
         if len(game_state['community_cards']) == 0:
-            self.log.info('CHEN')
-            position = self.get_position(dealer, player['id'])
-            when_to_raise = 0
-            if 0 <= position <= 1:
-                when_to_raise = 9
-            elif 2 <= position < 4:
-                when_to_raise = 8
+            self.log.info('This is a starter hand')
+            when_to_raise = 9
+            if len(game_state['players']) == 6:
+                position = self.get_position(dealer, player['id'], len(game_state['players']))
+                self.log.info('We are in position %s' % position )
+                if 0 <= position <= 1:
+                    when_to_raise = 9
+                elif 2 <= position < 4:
+                    when_to_raise = 8
+                else:
+                    when_to_raise = 7
             else:
-                when_to_raise = 7
+                self.log.info('We dont care about positions')
 
             if chen_sum >= when_to_raise:
+                self.log.info('CHEN value of hand is %s, raising' % chen_sum)
                 return min(int(player['stack'] * 0.3), current_buy_in - player['bet'] + minimum_raise)
             else:
+                self.log.info('CHEN value of hand is %s, folding' % chen_sum)
                 return 0
 
         # Not a starting hand
@@ -87,9 +89,9 @@ class Player:
         pass
 
     @staticmethod
-    def get_position(dealer, player):
+    def get_position(dealer, player, numPlayers):
         if player <= dealer:
-            return 6 - dealer + player
+            return (numPlayers - dealer + player) % 6
         else:
             return player - dealer
 
